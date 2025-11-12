@@ -14,6 +14,7 @@ const routes: Routes = [
   import('./features/search/search-module').then(m => m.SearchModule) },
   { path: 'alojamiento', loadChildren: () =>
     import('./features/alojamiento/alojamiento-module').then(m => m.AlojamientoModule) },
+      { path: 'alojamientos/:id', loadChildren: () => import('./features/alojamiento/alojamiento-module').then(m => m.AlojamientoModule) },
   { path: '**', redirectTo: 'home' }
 ];
 

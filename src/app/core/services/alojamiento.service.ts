@@ -14,6 +14,28 @@ export interface AlojamientoCard {
   portadaUrl?: string | null;
 }
 
+export interface AlojamientoDetail {
+  id: number;
+  titulo: string;
+  descripcion?: string;
+  ciudad?: string;
+  pais?: string;
+  precioNoche?: number;
+  capacidad?: number;
+  // Ajusta a tu DTO real:
+  anfitrionId?: number;
+  anfitrionNombre?: string;
+  anfitrionFotoUrl?: string;
+  servicios?: { id: number; nombre: string; descripcion?: string; iconoUrl?: string }[];
+}
+
+export interface ImagenDTO { id: number; url: string; descripcion?: string; orden?: number; }
+export interface ComentarioDTO {
+  id: number; autorNombre: string; calificacion: number; comentario: string; fechaCreacion?: string;
+}
+export interface StatsComentarios { promedio: number; total: number; }
+
+
 export interface SearchFilters {
   q?: string;
   ciudad?: string;
@@ -27,7 +49,7 @@ export interface SearchFilters {
 
 @Injectable({ providedIn: 'root' })
 export class AlojamientoService {
-  private base = environment.apiUrl;
+  private base = environment.apiUrl || '/api';
 
   constructor(private http: HttpClient) {}
 
@@ -61,6 +83,22 @@ export class AlojamientoService {
       map(arr => arr.map(this.toCard)),
       catchError(() => of([]))
     );
+  }
+
+   getById(id: number): Observable<AlojamientoDetail> {
+    return this.http.get<AlojamientoDetail>(`${this.base}/alojamientos/${id}`);
+  }
+
+  getImagenes(id: number): Observable<ImagenDTO[]> {
+    return this.http.get<ImagenDTO[]>(`${this.base}/imagenes/alojamiento/${id}`);
+  }
+
+  getComentariosTop(id: number): Observable<ComentarioDTO[]> {
+    return this.http.get<ComentarioDTO[]>(`${this.base}/comentarios/alojamiento/${id}/top`);
+  }
+
+  getComentariosStats(id: number): Observable<StatsComentarios> {
+    return this.http.get<StatsComentarios>(`${this.base}/comentarios/alojamiento/${id}/stats`);
   }
 
 private toDetalle = (it: any): AlojamientoDetalle => ({

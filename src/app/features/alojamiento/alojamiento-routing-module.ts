@@ -3,7 +3,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { DetalleAlojamientoComponent } from './pages/detalle';
 
 const routes: Routes = [
-  { path: ':id', component: DetalleAlojamientoComponent, title: 'Detalles de Alojamiento' }
+  { path: '', redirectTo: 'not-found', pathMatch: 'full' }, // opcional
+  { path: ':id', component: DetalleAlojamientoComponent, title: 'Detalle de Alojamiento' }
 ];
 
 @NgModule({

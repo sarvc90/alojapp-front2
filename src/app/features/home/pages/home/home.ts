@@ -91,5 +91,10 @@ private getId(a: AlojamientoCard): string | number | null {
   return (a as any).id ?? (a as any).alojamientoId ?? (a as any).codigo ?? (a as any).uuid ?? null;
 }
 
+openAlojamiento(id?: number) {
+  if (!id) return;
+  this.router.navigate(['/alojamientos', id]);
+}
+
 
 }

@@ -1,0 +1,22 @@
+/* Scrollbar fino en navegadores modernos */
+.scrollbar-thin {
+  scrollbar-width: thin;
+}
+.scrollbar-thin::-webkit-scrollbar { height: 10px; }
+.scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,.15);
+  border-radius: 9999px;
+}
+/* botón del header */
+.btn-login{
+  background:rgba(255,255,255,.2);
+  color:#fff; border:0; padding:.55rem 1.1rem; border-radius:10px;
+  font-weight:600; cursor:pointer;
+}
+header{ background:var(--brand); }
+
+$page:  #f5f9fa;
+$brand: #4a7c82; 
+$muted: #5f8a8d;
+

@@ -1,0 +1,191 @@
+<div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-md w-full space-y-8">
+    <div class="text-center">
+      <h1 class="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
+        Únete a ALOJAPP
+      </h1>
+      <p class="mt-2 text-sm text-slate-600 dark:text-slate-400">
+        Crea tu cuenta para descubrir increíbles alojamientos.
+      </p>
+    </div>
+
+    <form class="mt-8 space-y-6" [formGroup]="form" (ngSubmit)="submit()">
+      <div class="rounded-md -space-y-px">
+        <!-- Nombre -->
+        <div class="mb-4">
+          <label for="full-name" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+            Nombre Completo
+          </label>
+          <input
+            id="full-name"
+            type="text"
+            autocomplete="name"
+            placeholder="Tu nombre completo"
+            formControlName="nombre"
+            class="appearance-none relative block w-full px-3 py-2 border
+                   border-slate-300 dark:border-slate-600 placeholder-slate-400 dark:placeholder-slate-500
+                   text-slate-900 dark:text-white rounded-md focus:outline-none focus:ring-primary
+                   focus:border-primary sm:text-sm bg-background-light dark:bg-slate-800"
+            [ngClass]="{ 'border-red-500': nombreCtrl.touched && nombreCtrl.invalid }"
+          />
+          <small class="text-red-600" *ngIf="nombreCtrl.touched && nombreCtrl.hasError('required')">El nombre es obligatorio.</small>
+          <small class="text-red-600" *ngIf="nombreCtrl.hasError('minlength') || nombreCtrl.hasError('maxlength')">
+            Debe tener entre 3 y 100 caracteres.
+          </small>
+        </div>
+
+        <!-- Email -->
+        <div class="mb-4">
+          <label for="email-address" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+            Correo electrónico
+          </label>
+          <input
+            id="email-address"
+            type="email"
+            autocomplete="email"
+            placeholder="tu.email@example.com"
+            formControlName="email"
+            class="appearance-none relative block w-full px-3 py-2 border
+                   border-slate-300 dark:border-slate-600 placeholder-slate-400 dark:placeholder-slate-500
+                   text-slate-900 dark:text-white rounded-md focus:outline-none focus:ring-primary
+                   focus:border-primary sm:text-sm bg-background-light dark:bg-slate-800"
+            [ngClass]="{ 'border-red-500': emailCtrl.touched && emailCtrl.invalid }"
+          />
+          <small class="text-red-600" *ngIf="emailCtrl.touched && emailCtrl.hasError('required')">El correo es obligatorio.</small>
+          <small class="text-red-600" *ngIf="emailCtrl.touched && emailCtrl.hasError('email')">Formato de correo inválido.</small>
+        </div>
+
+        <!-- Contraseña -->
+        <div class="mb-4">
+          <label for="password" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+            Contraseña
+          </label>
+          <div class="relative">
+            <input
+              id="password"
+              [type]="hide ? 'password' : 'text'"
+              autocomplete="new-password"
+              placeholder="Contraseña segura"
+              formControlName="password"
+              class="appearance-none relative block w-full px-3 py-2 border
+                     border-slate-300 dark:border-slate-600 placeholder-slate-400 dark:placeholder-slate-500
+                     text-slate-900 dark:text-white rounded-md focus:outline-none focus:ring-primary
+                     focus:border-primary sm:text-sm bg-background-light dark:bg-slate-800"
+              [ngClass]="{ 'border-red-500': passwordCtrl.touched && passwordCtrl.invalid }"
+            />
+            <button type="button"
+                    class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"
+                    (click)="togglePasswordVisibility()">
+              <span class="material-symbols-outlined text-slate-500 dark:text-slate-400">
+                {{ hide ? 'visibility' : 'visibility_off' }}
+              </span>
+            </button>
+          </div>
+          <small class="text-red-600" *ngIf="passwordCtrl.touched && passwordCtrl.hasError('required')">La contraseña es obligatoria.</small>
+          <small class="text-red-600" *ngIf="passwordCtrl.hasError('minlength')">Mínimo 8 caracteres.</small>
+          <small class="text-red-600" *ngIf="passwordCtrl.hasError('pattern')">
+            Debe incluir al menos una <b>mayúscula</b> y un <b>número</b>.
+          </small>
+        </div>
+
+        <!-- Teléfono -->
+        <div class="mb-4">
+          <label for="phone-number" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+            Número de teléfono
+          </label>
+          <input
+            id="phone-number"
+            type="tel"
+            autocomplete="tel"
+            placeholder="+57 3001234567"
+            formControlName="phone"
+            class="appearance-none relative block w-full px-3 py-2 border
+                   border-slate-300 dark:border-slate-600 placeholder-slate-400 dark:placeholder-slate-500
+                   text-slate-900 dark:text-white rounded-md focus:outline-none focus:ring-primary
+                   focus:border-primary sm:text-sm bg-background-light dark:bg-slate-800"
+            [ngClass]="{ 'border-red-500': phoneCtrl.touched && phoneCtrl.invalid }"
+          />
+          <small class="text-red-600" *ngIf="phoneCtrl.hasError('pattern')">Formato inválido (solo dígitos y opcional +, 10–20).</small>
+        </div>
+
+        <!-- Fecha de nacimiento -->
+        <div class="mb-4">
+          <label for="birthdate" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+            Fecha de Nacimiento
+          </label>
+          <input
+            id="birthdate"
+            type="date"
+            autocomplete="bday"
+            formControlName="birthdate"
+            class="appearance-none relative block w-full px-3 py-2 border
+                   border-slate-300 dark:border-slate-600 placeholder-slate-400 dark:placeholder-slate-500
+                   text-slate-900 dark:text-white rounded-md focus:outline-none focus:ring-primary
+                   focus:border-primary sm:text-sm bg-background-light dark:bg-slate-800"
+            [ngClass]="{ 'border-red-500': birthdateCtrl.touched && birthdateCtrl.invalid }"
+          />
+          <small class="text-red-600" *ngIf="birthdateCtrl.touched && birthdateCtrl.hasError('required')">La fecha es obligatoria.</small>
+          <small class="text-red-600" *ngIf="birthdateCtrl.hasError('minAge')">Debes ser mayor de 18 años.</small>
+        </div>
+
+        <!-- Subir foto (opcional) -->
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+            Subir Foto de Perfil (opcional)
+          </label>
+          <div class="mt-2 flex justify-center rounded-md border-2 border-dashed border-slate-300 dark:border-slate-600 px-6 pt-5 pb-6">
+            <div class="space-y-1 text-center">
+              <span class="material-symbols-outlined text-4xl mx-auto text-slate-400">
+                cloud_upload
+              </span>
+              <div class="flex text-sm text-slate-600 dark:text-slate-400 items-center justify-center">
+                <label for="file-upload"
+                       class="relative cursor-pointer rounded-md bg-transparent font-medium text-primary hover:text-opacity-80 focus-within:outline-none">
+                  <span>Sube un archivo</span>
+                  <input id="file-upload" type="file" class="sr-only" (change)="onFileChange($event)" />
+                </label>
+                <p class="pl-1">o arrástralo y suéltalo</p>
+              </div>
+              <p class="text-xs text-slate-500 dark:text-slate-500">PNG, JPG, GIF hasta 10MB</p>
+              <p class="text-xs text-slate-500" *ngIf="selectedFileName">Seleccionado: <b>{{ selectedFileName }}</b></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <button
+          type="submit"
+          class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm
+                 font-medium rounded-md text-white bg-primary hover:bg-opacity-90 focus:outline-none
+                 focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+          [disabled]="loading">
+          <ng-container *ngIf="!loading; else loadingTpl">Registrar cuenta</ng-container>
+        </button>
+        <ng-template #loadingTpl>
+          <span class="animate-pulse">Creando cuenta…</span>
+        </ng-template>
+      </div>
+
+      <div class="text-center text-xs text-slate-500 dark:text-slate-400">
+        <p>
+          Registrándote, aceptas nuestros
+          <a href="#" class="font-semibold text-slate-700 dark:text-slate-300 hover:text-primary dark:hover:text-primary">Términos de servicio</a>
+          y
+          <a href="#" class="font-semibold text-slate-700 dark:text-slate-300 hover:text-primary dark:hover:text-primary">Política de privacidad</a>.
+        </p>
+      </div>
+
+      <div class="text-red-600 text-sm" *ngIf="errorMsg">{{ errorMsg }}</div>
+    </form>
+
+    <div class="text-center">
+      <p class="text-sm text-slate-600 dark:text-slate-400">
+        ¿Ya tienes una cuenta?
+        <a routerLink="/auth/login" class="font-medium text-primary hover:text-opacity-80">
+          Iniciar sesión
+        </a>
+      </p>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,62 @@
+<div class="container">
+  <header class="top">
+    <h1>Perfil</h1>
+  </header>
+
+  <!-- Tarjeta principal -->
+  <section class="card center">
+    <img class="avatar" [src]="avatar()" alt="Foto de perfil" />
+    <h2>{{ user?.nombre || 'Usuario' }}</h2>
+    <p class="subtitle">Viajero(a) apasionado(a) por explorar nuevas culturas.</p>
+  </section>
+
+  <!-- Datos de contacto -->
+  <section class="card">
+    <ul class="info">
+      <li><span class="icon">✉️</span> {{ user?.email }}</li>
+      <li *ngIf="user?.telefono"><span class="icon">📞</span> {{ user?.telefono }}</li>
+      <li *ngIf="user?.fechaNacimiento"><span class="icon">🎂</span> {{ user?.fechaNacimiento }}</li>
+    </ul>
+  </section>
+
+  <!-- Historial de reservas -->
+  <section>
+    <h3>Historial de reservas</h3>
+
+    <nav class="tabs">
+      <button [class.active]="tab==='proximas'"   (click)="setTab('proximas')">Próximas</button>
+      <button [class.active]="tab==='pasadas'"    (click)="setTab('pasadas')">Pasadas</button>
+      <button [class.active]="tab==='canceladas'" (click)="setTab('canceladas')">Canceladas</button>
+    </nav>
+
+    <div *ngIf="loadingRes" class="skeleton">Cargando reservas…</div>
+    <div *ngIf="!loadingRes && filtradas.length === 0" class="empty">No hay reservas para mostrar.</div>
+
+    <div class="list">
+      <article class="item" *ngFor="let r of filtradas">
+        <img class="thumb" [src]="r.alojamientoImagen || 'assets/placeholder.jpg'" alt="Alojamiento" />
+        <div class="grow">
+          <h4>{{ r.alojamientoTitulo }}</h4>
+          <p class="muted">{{ rangoFechas(r) }}</p>
+        </div>
+        <span class="state" [attr.data-state]="r.estado">{{ r.estado }}</span>
+      </article>
+    </div>
+  </section>
+
+  <!-- Ajustes -->
+  <section>
+    <h3>Ajustes</h3>
+    <div class="card list">
+      <a class="row" routerLink="/perfil/notificaciones">
+        <div>🔔 Notificaciones</div><span>›</span>
+      </a>
+      <a class="row" routerLink="/perfil/seguridad">
+        <div>🛡️ Seguridad</div><span>›</span>
+      </a>
+      <a class="row" routerLink="/soporte">
+        <div>🧑‍💻 Soporte</div><span>›</span>
+      </a>
+    </div>
+  </section>
+</div>

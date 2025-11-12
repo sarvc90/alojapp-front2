@@ -1,0 +1,11 @@
+:root{
+  --brand: #587D71;              
+}
+.bg-brand     { background-color: var(--brand) !important; }
+.bg-brand-20  { background-color: rgba(88,125,113,.20) !important; }
+.bg-brand-90  { background-color: rgba(88,125,113,.90) !important; }
+.input-ring-brand:focus{
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(88,125,113,.35);
+  border-color: var(--brand);
+}

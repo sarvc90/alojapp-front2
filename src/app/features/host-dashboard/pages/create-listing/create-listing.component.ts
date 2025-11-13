@@ -30,7 +30,7 @@ export class CreateListingComponent implements OnInit {
     this.servicios$ = this.srvServicios.getAll$(); 
     this.form = this.fb.group({
     titulo: ['', [Validators.required, Validators.minLength(6)]],
-    descripcion: ['', [Validators.required, Validators.minLength(30)]],
+    descripcion: ['', [Validators.required, Validators.minLength(50)]],
     ciudad: ['', Validators.required],
     direccion: ['', Validators.required],
     latitud: [null as number | null, Validators.required],

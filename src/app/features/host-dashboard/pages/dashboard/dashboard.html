@@ -1,1 +1,129 @@
-<p>dashboard works!</p>
+<header class="sticky top-0 z-10 flex items-center justify-between px-4 py-4 bg-white/80 backdrop-blur-sm border-b">
+  <a routerLink="/home" class="p-2 rounded-full hover:bg-slate-100">
+    <span class="material-symbols-outlined">arrow_back</span>
+  </a>
+  <h1 class="text-xl font-bold">Dashboard de Anfitrión</h1>
+  <span></span>
+</header>
+
+<main class="p-4 md:p-6 lg:p-8" *ngIf="!cargando; else loadingTpl">
+  <p *ngIf="error" class="text-red-600 mb-4">{{ error }}</p>
+
+  <!-- Métricas -->
+  <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8" *ngIf="stats">
+    <div class="p-6 bg-white rounded-2xl border shadow-sm">
+      <div class="flex justify-between items-start">
+        <h2 class="text-slate-500">Reservaciones</h2>
+        <span class="material-symbols-outlined text-slate-500">calendar_today</span>
+      </div>
+      <p class="text-4xl font-bold mt-2">{{ stats?.reservas || 0 }}</p>
+    </div>
+
+    <div class="p-6 bg-white rounded-2xl border shadow-sm">
+      <div class="flex justify-between items-start">
+        <h2 class="text-slate-500">Ingresos totales</h2>
+        <span class="material-symbols-outlined text-slate-500">wallet</span>
+      </div>
+      <p class="text-4xl font-bold mt-2">
+        {{ (stats?.ingresosTotales || 0) | currency:'USD' }}
+      </p>
+    </div>
+
+    <div class="p-6 bg-white rounded-2xl border shadow-sm">
+      <div class="flex justify-between items-start">
+        <h2 class="text-slate-500">Promedio de puntuación</h2>
+        <span class="material-symbols-outlined text-slate-500">star</span>
+      </div>
+      <p class="text-4xl font-bold mt-2">{{ stats?.promedioCalificacion || 0 }}</p>
+    </div>
+  </section>
+
+  <!-- Acciones -->
+  <section class="bg-white p-6 rounded-2xl border shadow-sm mb-8">
+    <h2 class="text-xl font-bold mb-4">Acciones de rápido acceso</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <a routerLink="/anfitrion/alojamientos/nuevo"
+         class="flex items-center justify-center gap-2 w-full p-4 border border-emerald-600 text-emerald-700 rounded-xl font-semibold hover:bg-emerald-50">
+        <span class="material-symbols-outlined">add</span>
+        Crear alojamiento
+      </a>
+      <a routerLink="/anfitrion/reservas"
+         class="flex items-center justify-center gap-2 w-full p-4 border border-emerald-600 text-emerald-700 rounded-xl font-semibold hover:bg-emerald-50">
+        <span class="material-symbols-outlined">bookmark_border</span>
+        Ver reservaciones
+      </a>
+    </div>
+  </section>
+
+  <!-- Mis alojamientos -->
+  <section class="bg-white p-6 rounded-2xl border shadow-sm mb-8">
+    <h2 class="text-xl font-bold mb-4">Mis alojamientos</h2>
+
+    <div *ngIf="alojamientos?.length; else noListings"
+         class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <article *ngFor="let a of alojamientos" class="rounded-2xl overflow-hidden border shadow-sm">
+        <img [src]="a.portadaUrl || 'assets/placeholder.jpg'" class="w-full h-48 object-cover" alt="">
+        <div class="p-4">
+          <h3 class="text-lg font-bold">{{ a.titulo }}</h3>
+          <p class="text-sm text-slate-500">{{ a.ciudad || '' }}</p>
+          <div class="flex items-center justify-between mt-4">
+            <div>
+              <span class="text-xs font-medium px-2.5 py-1 rounded-full"
+                    [ngClass]="estadoBadgeClase(a.estado)">
+                {{ a.estado || '—' }}
+              </span>
+              <p class="font-bold mt-1">{{ a.precioNoche | currency:'USD' }}/noche</p>
+            </div>
+            <a [routerLink]="['/anfitrion/alojamientos', a.id, 'editar']"
+               class="text-emerald-700 font-semibold py-2 px-4 rounded-xl hover:bg-emerald-50">
+              Editar
+            </a>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <ng-template #noListings>
+      <div class="text-slate-500">No hay alojamientos.</div>
+    </ng-template>
+  </section>
+
+  <!-- Reservaciones recientes -->
+  <section class="bg-white p-6 rounded-2xl border shadow-sm">
+    <h2 class="text-xl font-bold mb-4">Reservaciones recientes</h2>
+
+    <div *ngIf="reservas?.length; else noResv" class="overflow-x-auto">
+      <table class="w-full text-left text-slate-600">
+        <thead class="text-xs uppercase bg-slate-50">
+        <tr>
+          <th class="px-6 py-3">Estatus</th>
+          <th class="px-6 py-3">Huésped</th>
+          <th class="px-6 py-3">Contacto</th>
+          <th class="px-6 py-3">Fecha</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let r of reservas" class="border-b">
+          <td class="px-6 py-4">
+            <span class="text-xs font-medium px-2.5 py-1 rounded-full"
+                  [ngClass]="estadoBadgeClase(r.estado)">
+              {{ r.estado }}
+            </span>
+          </td>
+          <td class="px-6 py-4 font-medium text-slate-800">{{ r.huesped }}</td>
+          <td class="px-6 py-4">{{ r.contacto || '—' }}</td>
+          <td class="px-6 py-4">{{ r.fecha }}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <ng-template #noResv>
+      <div class="text-slate-500">No hay reservaciones.</div>
+    </ng-template>
+  </section>
+</main>
+
+<ng-template #loadingTpl>
+  <div class="p-8 text-slate-500">Cargando…</div>
+</ng-template>

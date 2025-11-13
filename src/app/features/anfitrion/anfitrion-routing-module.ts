@@ -6,7 +6,6 @@ import { map, take } from 'rxjs/operators';
 import { SerAnfitrionComponent } from './ser-anfitrion/ser-anfitrion';
 import { AuthService } from '../../core/services/auth.service';
 
-// Guard: exige sesión; si no, redirige a /auth/login?redirect=<url>
 export const mustBeLoggedInGuard: CanActivateFn = (_route, state) => {
   const auth = inject(AuthService);
   const router = inject(Router);

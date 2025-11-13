@@ -16,6 +16,7 @@ const routes: Routes = [
     import('./features/alojamiento/alojamiento-module').then(m => m.AlojamientoModule) },
   { path: 'alojamientos/:id', loadChildren: () => import('./features/alojamiento/alojamiento-module').then(m => m.AlojamientoModule) },
   { path: 'ser-anfitrion', loadChildren: () => import('./features/anfitrion/anfitrion-module').then(m => m.AnfitrionModule) },
+  { path: 'anfitrion', loadChildren: () => import('./features/host-dashboard/host-dashboard-module').then(m => m.HostDashboardModule) },
   { path: '**', redirectTo: 'home' }
 ];
 

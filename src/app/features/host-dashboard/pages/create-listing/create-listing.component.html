@@ -1,0 +1,140 @@
+<!-- src/app/features/host-dashboard/pages/create-listing/create-listing.component.html -->
+<section class="px-4 sm:px-8 md:px-20 lg:px-40 py-8">
+  <!-- Header -->
+  <header class="flex items-center justify-between mb-6">
+    <a routerLink="/anfitrion" class="p-2 rounded-full hover:bg-slate-100">
+      <span class="material-symbols-outlined">arrow_back</span>
+    </a>
+    <h1 class="text-3xl font-black">Crear Nuevo Alojamiento</h1>
+    <span></span>
+  </header>
+
+  <!-- Form -->
+  <form [formGroup]="form" (ngSubmit)="submit()"
+        class="bg-white p-6 rounded-xl border border-gray-200 space-y-8">
+
+    <p *ngIf="error" class="text-red-600">{{ error }}</p>
+
+    <!-- Información Básica -->
+    <section>
+      <h2 class="text-xl font-bold mb-3">Información Básica</h2>
+      <div class="grid grid-cols-1 gap-6">
+        <label class="flex flex-col">
+          <span class="font-medium mb-2">Título del Alojamiento</span>
+          <input formControlName="titulo"
+                 class="form-input h-14 rounded-lg border p-3"
+                 placeholder="Ej: Apartamento acogedor con vistas al mar" />
+          <small class="text-red-600" *ngIf="form.get('titulo')?.touched && form.get('titulo')?.invalid">
+            Mínimo 6 caracteres.
+          </small>
+        </label>
+
+        <label class="flex flex-col">
+          <span class="font-medium mb-2">Descripción</span>
+          <textarea formControlName="descripcion"
+                    class="form-input min-h-36 rounded-lg border p-3"
+                    placeholder="Describe tu alojamiento en detalle..."></textarea>
+          <small class="text-red-600" *ngIf="form.get('descripcion')?.touched && form.get('descripcion')?.invalid">
+            Mínimo 30 caracteres.
+          </small>
+        </label>
+      </div>
+    </section>
+
+    <!-- Ubicación -->
+    <section>
+      <h2 class="text-xl font-bold mb-3">Ubicación</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <label class="flex flex-col">
+          <span class="font-medium mb-2">Ciudad</span>
+          <input formControlName="ciudad" class="form-input h-14 rounded-lg border p-3" placeholder="Ej: Cartagena" />
+        </label>
+
+        <label class="flex flex-col">
+          <span class="font-medium mb-2">Dirección</span>
+          <input formControlName="direccion" class="form-input h-14 rounded-lg border p-3" placeholder="Calle 10 #5-20, Bocagrande" />
+        </label>
+
+        <label class="flex flex-col">
+          <span class="font-medium mb-2">Latitud</span>
+          <input type="number" step="any" formControlName="latitud"
+                 class="form-input h-14 rounded-lg border p-3" placeholder="10.3910485" />
+        </label>
+
+        <label class="flex flex-col">
+          <span class="font-medium mb-2">Longitud</span>
+          <input type="number" step="any" formControlName="longitud"
+                 class="form-input h-14 rounded-lg border p-3" placeholder="-75.4794257" />
+        </label>
+      </div>
+    </section>
+
+    <!-- Detalles y Servicios -->
+    <section>
+      <h2 class="text-xl font-bold mb-3">Detalles y Servicios</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <label class="flex flex-col">
+          <span class="font-medium mb-2">Precio por Noche</span>
+          <div class="relative">
+            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500">$</span>
+            <input type="number" formControlName="precioNoche"
+                   class="form-input h-14 rounded-lg border pl-8 p-3" placeholder="350000" />
+          </div>
+        </label>
+
+        <label class="flex flex-col">
+          <span class="font-medium mb-2">Capacidad Máxima (Huéspedes)</span>
+          <input type="number" formControlName="capacidadMaxima"
+                 class="form-input h-14 rounded-lg border p-3" placeholder="4" />
+        </label>
+
+        <div class="md:col-span-2">
+          <label class="flex flex-col">
+            <span class="font-medium mb-2">Servicios del Alojamiento</span>
+            <!-- importantísimo: ngValue para mantener number[], no string[] -->
+            <select formControlName="serviciosIds" multiple class="form-select h-36 rounded-lg border p-3">
+              <option *ngFor="let s of (servicios$ | async)" [ngValue]="s.id">{{ s.nombre }}</option>
+            </select>
+            <small class="text-slate-500 mt-1 block">Mantén Ctrl/Cmd para seleccionar varios.</small>
+          </label>
+        </div>
+      </div>
+    </section>
+
+    <!-- Galería -->
+    <section>
+      <h2 class="text-xl font-bold mb-3">Galería</h2>
+
+      <div class="p-4">
+        <div class="flex items-center justify-center w-full">
+          <label
+            class="flex flex-col items-center justify-center w-full h-56 border-2 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors">
+            <div class="flex flex-col items-center justify-center pt-5 pb-6">
+              <span class="material-symbols-outlined text-4xl text-gray-500 mb-2">cloud_upload</span>
+              <p class="mb-1 text-sm"><span class="font-semibold">Haz clic para subir</span> o arrastra y suelta</p>
+              <p class="text-xs text-slate-500">PNG, JPG o GIF</p>
+            </div>
+            <input type="file" (change)="onFilesSelected($event)" class="hidden" multiple />
+          </label>
+        </div>
+
+        <div class="mt-3 text-sm text-slate-600" *ngIf="files.length">
+          Seleccionadas: {{ files.length }}
+          <ul class="list-disc ml-6 mt-1">
+            <li *ngFor="let f of files">{{ f.name }}</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Submit -->
+    <div class="flex justify-end pt-2">
+      <button type="submit"
+              [disabled]="publicando || form.invalid"
+              class="h-14 px-8 font-bold text-white bg-emerald-700 rounded-lg hover:bg-emerald-600 disabled:opacity-60">
+        <span *ngIf="!publicando">Publicar Alojamiento</span>
+        <span *ngIf="publicando">Publicando…</span>
+      </button>
+    </div>
+  </form>
+</section>

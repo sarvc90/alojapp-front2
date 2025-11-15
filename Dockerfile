@@ -3,21 +3,24 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm ci
 COPY . .
-RUN npx ng build --configuration production
 
-# VERIFICAR QUÉ HAY EN DIST
-RUN echo "=== CONTENIDO DE DIST ==="
-RUN ls -la /app/dist/
-RUN echo "=== CONTENIDO DE DIST/ALOJAPP ==="
-RUN ls -la /app/dist/alojapp/
+# FORZAR una salida simple y directa
+RUN npx ng build --configuration production --output-path=/app/dist-final
 
 FROM nginx:alpine
-COPY --from=build /app/dist/alojapp /usr/share/nginx/html
-COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# VERIFICAR QUÉ SE COPIÓ A NGINX
-RUN echo "=== CONTENIDO EN NGINX ==="
-RUN ls -la /usr/share/nginx/html/
+# COPIAR DIRECTAMENTE sin rutas complejas
+COPY --from=build /app/dist-final /usr/share/nginx/html
+
+# CONFIGURACIÓN NGINX MÍNIMA
+RUN echo 'server { \
+    listen 80; \
+    location / { \
+        root /usr/share/nginx/html; \
+        index index.html; \
+        try_files $uri $uri/ /index.html; \
+    } \
+}' > /etc/nginx/conf.d/default.conf
 
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]

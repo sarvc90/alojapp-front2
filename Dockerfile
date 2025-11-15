@@ -3,18 +3,20 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm ci
 COPY . .
-ENV NG_CLI_ANALYTICS=false
-ENV NODE_OPTIONS="--max_old_space_size=4096"
-RUN npx ng build --configuration production --verbose --no-progress
+RUN npx ng build --configuration production
 
-# AGREGA ESTA LÍNEA PARA VERIFICAR:
+# VERIFICAR QUÉ HAY EN DIST
+RUN echo "=== CONTENIDO DE DIST ==="
 RUN ls -la /app/dist/
+RUN echo "=== CONTENIDO DE DIST/ALOJAPP ==="
+RUN ls -la /app/dist/alojapp/
 
 FROM nginx:alpine
 COPY --from=build /app/dist/alojapp /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# AGREGA ESTA LÍNEA TAMBIÉN:
+# VERIFICAR QUÉ SE COPIÓ A NGINX
+RUN echo "=== CONTENIDO EN NGINX ==="
 RUN ls -la /usr/share/nginx/html/
 
 EXPOSE 80
